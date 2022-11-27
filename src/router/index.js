@@ -18,7 +18,7 @@ const routes = [
         component: () => import('@/views/register/Index.vue')
     },
     {
-        path: '/show',
+        path: '/product/:id',
         name: 'show',
         component: () => import('@/views/home/Show.vue')
     },
@@ -32,7 +32,18 @@ const routes = [
         name: 'success',
         component: () => import('@/views/success/Index.vue')
     },
+    {
+        path: '/categories',
+        name: 'categories',
+        component: () => import('@/views/categories/Index.vue')
+    },
+    {
+        path: '/categories/:id',
+        name: 'detail_product',
+        component: () => import('@/views/categories/Show.vue')
+    },
 ]
+
 
 //create router
 const router = createRouter({
