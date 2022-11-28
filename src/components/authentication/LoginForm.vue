@@ -27,13 +27,21 @@
 <script>
 import { reactive } from 'vue';
 import Api from '@/api/Api';
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user';
+
 export default {
     name: 'LoginFormComponent',
     setup() {
+
+        const store = useUserStore()
+        const router = useRouter()
+
         const form = reactive({
             'email': '',
             'password': ''
         });
+
         async function login() {
             try {
                 var response = await Api.post('login', {
@@ -42,6 +50,11 @@ export default {
                 })
                 localStorage.setItem('access_token', response.data.data.access_token)
                 localStorage.setItem('token_type', response.data.data.token_type)
+
+
+                store.fetchUser()
+
+                router.push({ name: 'home' })
             } catch (error) {
                 console.log(error)
             }

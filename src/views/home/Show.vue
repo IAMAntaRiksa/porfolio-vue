@@ -1,5 +1,5 @@
 <template>
-    <main v-if="product">
+    <main v-if="product.thumbnails">
         <div class="container p-2 mx-auto my-10 max-w-7xl">
             <div class="flex flex-row flex-wrap py-4">
                 <main role="main" class="w-full px-4 pt-1 sm:w-2/3 md:w-2/3">
@@ -52,10 +52,14 @@
 
                                 </ul>
                             </div>
-                            <a href="checkout.html"
+                            <a v-if="user.data.subscription.length > 0" :href="product.file"
                                 class="inline-flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 md:py-2 md:text-md md:px-10 hover:shadow">
                                 Download Now
                             </a>
+                            <router-link :to="{ name: 'pricing' }" v-else
+                                class="inline-flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 md:py-2 md:text-md md:px-10 hover:shadow">
+                                Subscription
+                            </router-link>
                         </div>
                     </div>
                 </aside>
@@ -70,6 +74,7 @@ import Gallery from "@/components/gallery/Gallery";
 import { useRoute } from 'vue-router';
 import { useItemStore } from '@/stores/item'
 import { onMounted, computed } from 'vue'
+import { useUserStore } from "@/stores/user";
 
 
 export default {
@@ -81,17 +86,24 @@ export default {
     setup() {
         const store = useItemStore()
         const route = useRoute()
+        const userStore = useUserStore()
 
         onMounted(() => {
             store.fetchDetailItems(route.params.id)
+            userStore.fetchUser()
         })
 
         const product = computed(() =>
             store.getDetailItems
         )
+
+        const user = computed(() =>
+            userStore.getUser
+        )
         return {
             store,
             product,
+            user
         }
 
     }
